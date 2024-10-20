@@ -163,4 +163,32 @@ const buttonsConfig = {
 
 }
 
-module.exports = { buttonsConfig }
+const texts = {
+  en: {
+    '0_1': 'Sorry, there was an error sending the file.',
+    '0_2': 'Leave a text message below.',
+    '0_3': 'You have not left a meaningful message. Please try again',
+    '0_4': 'Thank you! Your message has been sent.\n Wait for a response within 30 minutes',
+
+  },
+  pl: {
+    '0_1': 'Przepraszamy, wystąpił błąd podczas wysyłania pliku.',
+    '0_2': 'Pozostaw poniżej wiadomość tekstową.',
+    '0_3': 'Nie zostawiłeś sensownej wiadomości. Spróbuj ponownie',
+    '0_4': 'Dziękuję! Twoja wiadomość została wysłana.\n Odpowiedź otrzymasz w ciągu 30 minut',
+
+  },
+  de: {
+    '0_1': 'Entschuldigung, beim Senden der Datei ist ein Fehler aufgetreten.',
+    '0_2': 'Hinterlassen Sie unten eine Textnachricht.',
+    '0_3': 'Sie haben keine sinnvolle Nachricht hinterlassen. Bitte versuchen Sie es erneut',
+    '0_4': 'Danke! Ihre Nachricht wurde gesendet.\n Warten Sie auf eine Antwort innerhalb von 30 Minuten',
+  },
+  ua: {
+    '0_1': 'Вибачте, сталася помилка під час відправлення файлу.',
+    '0_2': 'Залиште текстове повідомлення нижче.',
+    '0_3': 'Ви не залишили змістовного повідомлення. Будь ласка, спробуйте ще раз',
+    '0_4': 'Дякуємо! Ваше повідомлення відправлено.\n Очікуйте відповіді протягом 30 хвилин',
+  }
+}
+module.exports = { buttonsConfig, texts }

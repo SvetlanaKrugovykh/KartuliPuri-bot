@@ -51,6 +51,9 @@ async function handler(bot, msg, webAppUrl) {
     case '0_4':
       goBack(bot, msg)
       break
+    case '0_5':
+      await menu.usersStarterMenu(bot, msg, lang)
+      break
     case '0_6':
     case '0_7':
     case '0_8':
@@ -59,8 +62,9 @@ async function handler(bot, msg, webAppUrl) {
       if (selected_) selectedByUser[chatId] = selected_
       await menu.commonStartMenu(bot, msg)
       break
-    case '0_12':
-      await menu.usersStarterMenu(bot, msg, lang)
+    case '2_1':
+      lang = selectedByUser[chatId]?.language || 'pl'
+      await menu.selectProducts(bot, msg, lang)
       break
     case '2_7':
       selectedByUser[chatId] = {}

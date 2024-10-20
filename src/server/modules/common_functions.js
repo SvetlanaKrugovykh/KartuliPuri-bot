@@ -1,5 +1,6 @@
 
 const sendReqToDB = require("../modules/tlg_to_DB")
+const { menuItems } = require('../data/consts')
 
 module.exports.saveLanguage = async function (bot, msg, menuItem, selectedByUser) {
   try {
@@ -16,7 +17,7 @@ module.exports.saveLanguage = async function (bot, msg, menuItem, selectedByUser
     }
     let selectedByUser_ = { ...selectedByUser, language: txtLanguage, id: msg.chat.id, name: msg.chat.username + '---' + msg.chat.first_name + ' ' + msg.chat.last_name }
     const signUpResult = await sendReqToDB('___UserRegistration__', selectedByUser_, msg.chat.id)
-    console.log('The signUpResult:', signUpResult);
+    console.log('The signUpResult:', signUpResult)
     return selectedByUser_
   } catch (err) {
     console.log(err)
@@ -24,3 +25,12 @@ module.exports.saveLanguage = async function (bot, msg, menuItem, selectedByUser
   }
 }
 
+module.exports.getProducts = async function (lang) {
+  try {
+    const menuItems_ = menuItems[lang]
+    return menuItems_
+  } catch (err) {
+    console.log(err)
+    return []
+  }
+}

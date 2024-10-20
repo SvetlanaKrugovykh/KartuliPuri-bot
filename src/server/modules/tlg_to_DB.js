@@ -43,7 +43,7 @@ function objToString(reqType, data, text) {
 
   switch (reqType) {
     case '__CheckTlgClient__':
-      return (data.id + '#' + data.name)
+      return (text + '#' + data?.name + '#' + data?.language)
     case '___UserRegistration__':
       return (text + '#' + data?.name + '#' + data?.language)
     case '___GetTgUserData__':
