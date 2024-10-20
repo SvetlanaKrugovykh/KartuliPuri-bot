@@ -44,6 +44,8 @@ module.exports.checkDistance = async function (cafeLocation, clientLocation) {
   )
 
   const distanceInKm = distance / 1000 // Convert meters to kilometers
+  console.log(`Client location: `, clientLocation)
+  console.log(`Distance in km: ${distanceInKm}`)
   return distanceInKm <= 30
 }
 
