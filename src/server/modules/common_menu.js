@@ -68,17 +68,57 @@ module.exports.supportScene = async function (bot, msg) {
   try {
     const chatId = msg.chat.id
     await bot.sendMessage(chatId, `<i>${texts[lang]['0_2']}\n</i>`, { parse_mode: "HTML" })
-    let userInput = await inputLineScene(bot, msg)
-    if (userInput.length < 5) {
-      await bot.sendMessage(chatId, texts[lang]['0_3'])
-      return
+
+    const collectedMessages = []
+
+    const handleMessage = async (message) => {
+      if (message.text) {
+        collectedMessages.push({ type: 'text', content: message.text })
+      } else if (message.photo) {
+        const fileId = message.photo[message.photo.length - 1].file_id
+        collectedMessages.push({ type: 'photo', fileId })
+      } else if (message.document) {
+        const fileId = message.document.file_id
+        collectedMessages.push({ type: 'document', fileId })
+      } else if (message.audio) {
+        const fileId = message.audio.file_id
+        collectedMessages.push({ type: 'audio', fileId })
+      } else if (message.voice) {
+        const fileId = message.voice.file_id
+        collectedMessages.push({ type: 'voice', fileId })
+      }
     }
-    console.log(userInput)
-    await bot.sendMessage(GROUP_ID, `Appeal from ${msg.chat.first_name} ${msg.chat.last_name} id ${msg.chat.id} username ${msg.chat.username}` + `\n` + userInput, { parse_mode: "HTML" })
+
+    bot.on('message', async (message) => {
+      if (message.chat.id === chatId) {
+        await handleMessage(message)
+      }
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 30000))
+
+    for (const message of collectedMessages) {
+      if (message.type === 'text') {
+        await bot.sendMessage(GROUP_ID, `Message from ${msg.chat.first_name} ${msg.chat.last_name} (ID: ${msg.chat.id}):\n${message.content}`, { parse_mode: "HTML" })
+      } else {
+        await bot.sendMessage(GROUP_ID, `Message from ${msg.chat.first_name} ${msg.chat.last_name} (ID: ${msg.chat.id}):`, { parse_mode: "HTML" })
+        if (message.type === 'photo') {
+          await bot.sendPhoto(GROUP_ID, message.fileId)
+        } else if (message.type === 'document') {
+          await bot.sendDocument(GROUP_ID, message.fileId)
+        } else if (message.type === 'audio') {
+          await bot.sendAudio(GROUP_ID, message.fileId)
+        } else if (message.type === 'voice') {
+          await bot.sendVoice(GROUP_ID, message.fileId)
+        }
+      }
+    }
+
     await bot.sendMessage(chatId, texts[lang]['0_4'], { parse_mode: "HTML" })
 
   } catch (err) {
     console.log(err)
+    await bot.sendMessage(msg.chat.id, texts[lang]['0_5'])
   }
 }
 
@@ -102,7 +142,7 @@ module.exports.selectProducts = async function (bot, msg, lang = "en") {
     const isWithinRange = await geo.checkDistance(cafeLocation, clientLocation)
 
     if (!isWithinRange) {
-      await bot.sendMessage(msg.chat.id, 'Sorry, you are too far from our café to place an order.')
+      await bot.sendMessage(msg.chat.id, texts[lang]['0_6'])
       return
     }
 
@@ -124,7 +164,7 @@ module.exports.selectProducts = async function (bot, msg, lang = "en") {
     })
   } catch (error) {
     console.log(error)
-    await bot.sendMessage(msg.chat.id, 'There was an error processing your request.')
+    await bot.sendMessage(msg.chat.id, texts[lang]['0_5'])
   }
 }
 
