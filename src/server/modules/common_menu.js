@@ -1,42 +1,57 @@
-const { inputLineScene } = require('../controllers/inputLine')
 const { clientAdminMenuStarter } = require('../controllers/clientsAdmin')
 require('dotenv').config()
 const { buttonsConfig, texts } = require('./keyboard')
 const sendReqToDB = require('../modules/tlg_to_DB')
 const { users } = require('../users/users.model')
 const path = require('path')
-const { selectedByUser } = require('../globalBuffer')
+const { globalBuffer, selectedByUser } = require('../globalBuffer')
 const { getProducts } = require('./common_functions')
 const geo = require('./geo')
+const { menuItems } = require('../data/consts')
 
 
-module.exports.commonStartMenu = async function (bot, msg) {
+module.exports.commonStartMenu = async function (bot, msg, home = false) {
   console.log(`/start at ${new Date()} tg_user_id: ${msg.chat.id}`)
   const adminUser = users.find(user => user.id === msg.chat.id)
   if (adminUser) {
     await clientAdminMenuStarter(bot, msg, buttonsConfig["clientAdminStarterButtons"])
   } else {
     const lang = selectedByUser[msg.chat.id]?.language || 'pl'
-    await module.exports.userMenu(bot, msg, lang)
+    await module.exports.userMenu(bot, msg, lang, home)
   }
 }
 
-module.exports.userMenu = async function (bot, msg, lang = "en") {
-  let selectedByUser_ = { ...selectedByUser, language: lang, id: msg.chat.id, name: msg.chat.username + '---' + msg.chat.first_name + ' ' + msg.chat.last_name }
-  let lang_ = selectedByUser_?.language || 'pl'
+module.exports.userMenu = async function (bot, msg, lang = "en", home = false) {
+  if (!selectedByUser[msg.chat.id]) {
+    selectedByUser[msg.chat.id] = {}
+  }
+
+  selectedByUser[msg.chat.id] = {
+    ...selectedByUser[msg.chat.id],
+    language: lang,
+    id: msg.chat.id,
+    name: msg.chat.username + '---' + msg.chat.first_name + ' ' + msg.chat.last_name
+  }
+
+  let lang_ = selectedByUser?.language || 'pl'
   let authorized = false
   try {
-    const response = await sendReqToDB('__CheckTlgClient__', selectedByUser_, msg.chat.id)
+    const response = await sendReqToDB('__CheckTlgClient__', selectedByUser[msg.chat.id], msg.chat.id)
     console.log('CheckTlgClient:', response)
-    authorized = response?.includes("authorized")
     const parsedResponse = JSON.parse(response)
+    authorized = parsedResponse.ResponseArray?.[0]?.authorized || false
     lang_ = parsedResponse.ResponseArray?.[0]?.language || 'pl'
   } catch (err) {
     console.log(err)
   }
-  if (authorized) {
+
+  selectedByUser[msg.chat.id].authorized = authorized
+
+  if (authorized && home) {
+    selectedByUser[msg.chat.id].authorized = true
     await module.exports.usersStarterMenu(bot, msg, lang_)
   } else {
+    selectedByUser[msg.chat.id].authorized = false
     await module.exports.guestMenu(bot, msg, lang)
   }
 }
@@ -142,16 +157,30 @@ module.exports.downloadMenu = async function (bot, msg, lang = "en") {
   }
 }
 
-module.exports.selectProducts = async function (bot, msg, lang = "en") {
-  try {
+module.exports.checkLocation = async function (bot, msg) {
+  const chatId = msg.chat.id
+  if (!selectedByUser[chatId]) selectedByUser[chatId] = {}
+  if (!globalBuffer[chatId]) globalBuffer[chatId] = {}
+
+  if (!selectedByUser[chatId]?.authorized) {
     const cafeLocation = await geo.getCafeLocation()
     const clientLocation = await geo.requestLocation(bot, msg)
     const isWithinRange = await geo.checkDistance(cafeLocation, clientLocation)
 
     if (!isWithinRange) {
       await bot.sendMessage(msg.chat.id, texts[lang]['0_6'])
-      return
+      return false
     }
+  } else { return true }
+  return true
+}
+
+module.exports.selectProducts = async function (bot, msg, lang = "en") {
+  try {
+    const chatId = msg.chat.id
+    if (!globalBuffer[chatId]) globalBuffer[chatId] = {}
+
+    globalBuffer[chatId].selectAction = 'selection'
 
     const data = await getProducts(lang)
 
@@ -175,6 +204,40 @@ module.exports.selectProducts = async function (bot, msg, lang = "en") {
   }
 }
 
+module.exports.removeProducts = async function (bot, msg, lang, operation) {
+  try {
+    const chatId = msg.chat.id
+    const selectedProducts = globalBuffer[chatId]?.selectedProducts
+    globalBuffer[chatId].selectAction = operation
+    if (!Array.isArray(selectedProducts) || selectedProducts.length === 0) {
+      await bot.sendMessage(chatId, texts[lang]['0_9'])
+      return
+    }
 
+    const productButtons = {
+      title: texts[lang]['0_10'],
+      options: [{ resize_keyboard: true }],
+      buttons: selectedProducts.map(productId => {
+        const product = menuItems[lang][productId];
+        return [{ text: `👦🏼 ${product.description}`, callback_data: productId }];
+      })
+    }
 
+    await bot.sendMessage(chatId, texts[lang]['0_10'], {
+      reply_markup: {
+        inline_keyboard: productButtons.buttons,
+        resize_keyboard: true
+      }
+    })
 
+  } catch (error) { console.log(error) }
+}
+
+module.exports.ordersMenu = async function (bot, msg, lang = "en") {
+  await bot.sendMessage(msg.chat.id, buttonsConfig["usersOrderMenu"].title[lang], {
+    reply_markup: {
+      keyboard: buttonsConfig["usersOrderMenu"].buttons[lang],
+      resize_keyboard: true
+    }
+  })
+}

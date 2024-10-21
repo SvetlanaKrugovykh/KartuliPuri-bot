@@ -64,22 +64,28 @@ async function handler(bot, msg, webAppUrl) {
       break
     case '2_1':
       lang = selectedByUser[chatId]?.language || 'pl'
-      await menu.selectProducts(bot, msg, lang)
+      await menu.ordersMenu(bot, msg, lang)
       break
     case '2_7':
       selectedByUser[chatId] = {}
-      globalBuffer[chatId].selectedCustomers = []
-      globalBuffer[chatId].selectedSubdivisions = []
-      globalBuffer[chatId].OrderAttachmentFileNames = []
-      globalBuffer[chatId].selectionSubdivisionFlag = false
+      globalBuffer[chatId].selectedProducts = []
+      globalBuffer[chatId].selectionProductsFlag = false
       globalBuffer[chatId].selectionFlag = false
       await msgSenderMenu(bot, msg)
       break
     case '3_1':
-      await clientsAdminGetInfo(bot, msg)
+      const inZone = await menu.checkLocation(bot, msg)
+      if (!inZone) return
+      await menu.selectProducts(bot, msg, lang)
       break
     case '3_2':
-      await clientsAdminResponseToRequest(bot, msg)
+      await menu.removeProducts(bot, msg, lang, 'finalize')
+      break
+    case '3_3':
+      //await clientsAdminResponseToRequest(bot, msg)
+      break
+    case '3_4':
+      //await clientsAdminResponseToRequest(bot, msg)
       break
     case '13_3':
       await bot.sendMessage(msg.chat.id, `Ok!\n`, {
@@ -87,16 +93,6 @@ async function handler(bot, msg, webAppUrl) {
           remove_keyboard: true
         }
       })
-      break
-    case '9_2':
-      await chooseTypeOfPeriod(bot, msg)
-      break
-    case '9_4':
-      await everyDayOrWeek(bot, msg)
-      break
-    case 'any_period':
-      await chooseData(bot, msg, 'початкову')
-      await chooseData(bot, msg, 'кінцеву')
       break
     default:
       if (msg.text === undefined) return
@@ -162,7 +158,7 @@ async function switchDynamicSceenes(bot, msg) {
 async function goBack(bot, msg, forcefully = false) {
   try {
     if (msg.text.includes('🏠') || forcefully) {
-      await menu.commonStartMenu(bot, msg)
+      await menu.commonStartMenu(bot, msg, true)
     } else if (msg.text.includes('↩️')) {
       await menu.usersStarterMenu(bot, msg)
     }

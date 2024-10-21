@@ -120,8 +120,47 @@ const buttonsConfig = {
       ]
     }
   },
-
+  usersOrderMenu: {
+    title: {
+      pl: 'Proszę wybrać dzialanie',
+      en: 'Please select an action',
+      de: 'Bitte wählen Sie eine Aktion',
+      uk: 'Оберіть, будь ласка, дію'
+    },
+    options: [{ resize_keyboard: true }],
+    buttons: {
+      pl: [
+        [{ text: '📝 Dodaj produkt', callback_data: '3_1' }],
+        [{ text: '📝 Usuń produkt', callback_data: '3_2' }],
+        [{ text: '📝 Zakończ zamówienie', callback_data: '3_3' }],
+        [{ text: '📝 Wyślij zamówienie', callback_data: '3_4' }],
+        [{ text: '🏠', callback_data: '0_4' }]
+      ],
+      en: [
+        [{ text: '📝 Add a product', callback_data: '3_1' }],
+        [{ text: '📝 Remove a product', callback_data: '3_2' }],
+        [{ text: '📝 Complete the order', callback_data: '3_3' }],
+        [{ text: '📝 Send the order', callback_data: '3_4' }],
+        [{ text: '🏠', callback_data: '0_4' }]
+      ],
+      de: [
+        [{ text: '📝 Produkt hinzufügen', callback_data: '3_1' }],
+        [{ text: '📝 Produkt entfernen', callback_data: '3_2' }],
+        [{ text: '📝 Bestellung abschließen', callback_data: '3_3' }],
+        [{ text: '📝 Bestellung senden', callback_data: '3_4' }],
+        [{ text: '🏠', callback_data: '0_4' }]
+      ],
+      uk: [
+        [{ text: '📝 Додати продукт', callback_data: '3_1' }],
+        [{ text: '📝 Видалити продукт', callback_data: '3_2' }],
+        [{ text: '📝 Завершити замовлення', callback_data: '3_3' }],
+        [{ text: '📝 Відправити замовлення', callback_data: '3_4' }],
+        [{ text: '🏠', callback_data: '0_4' }]
+      ]
+    },
+  }
 }
+
 
 const texts = {
   en: {
@@ -131,7 +170,10 @@ const texts = {
     '0_4': 'Thank you! Your message has been sent.\n Wait for a response within 30 minutes',
     '0_5': 'There was an error processing your request.',
     '0_6': 'Sorry, you are too far from our café to place an order.',
-
+    '0_7': 'Added:',
+    '0_8': 'Removed:',
+    '0_9': 'No products selected',
+    '0_10': 'Selected products',
   },
   pl: {
     '0_1': 'Przepraszamy, wystąpił błąd podczas wysyłania pliku.',
@@ -140,7 +182,10 @@ const texts = {
     '0_4': 'Dziękuję! Twoja wiadomość została wysłana.\n Odpowiedź otrzymasz w ciągu 30 minut',
     '0_5': 'Wystąpił błąd podczas przetwarzania Twojego żądania.',
     '0_6': 'Przepraszamy, jesteś zbyt daleko od naszej kawiarni, aby złożyć zamówienie.',
-
+    '0_7': 'Dodano:',
+    '0_8': 'Usunięto:',
+    '0_9': 'Nie wybrano produktów',
+    '0_10': 'Wybrane produkty',
   },
   de: {
     '0_1': 'Entschuldigung, beim Senden der Datei ist ein Fehler aufgetreten.',
@@ -149,6 +194,10 @@ const texts = {
     '0_4': 'Danke! Ihre Nachricht wurde gesendet.\n Warten Sie auf eine Antwort innerhalb von 30 Minuten',
     '0_5': 'Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten.',
     '0_6': 'Entschuldigung, Sie sind zu weit von unserem Café entfernt, um eine Bestellung aufzugeben.',
+    '0_7': 'Hinzugefügt:',
+    '0_8': 'Entfernt:',
+    '0_9': 'Keine Produkte ausgewählt',
+    '0_10': 'Ausgewählte Produkte',
   },
   uk: {
     '0_1': 'Вибачте, сталася помилка під час відправлення файлу.',
@@ -157,6 +206,10 @@ const texts = {
     '0_4': 'Дякуємо! Ваше повідомлення відправлено.\n Очікуйте відповіді протягом 30 хвилин',
     '0_5': 'Під час обробки вашого запиту сталася помилка.',
     '0_6': "Вибачте, ви занадто далеко від нашої кав'ярні, щоб зробити замовлення.",
+    '0_7': 'Додано:',
+    '0_8': 'Видалено:',
+    '0_9': 'Продукти не вибрані',
+    '0_10': 'Вибрані продукти',
   }
 }
 module.exports = { buttonsConfig, texts }
