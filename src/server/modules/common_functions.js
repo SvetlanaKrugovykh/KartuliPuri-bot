@@ -12,6 +12,9 @@ module.exports.saveLanguage = async function (bot, msg, menuItem, selectedByUser
       case '0_8':
         txtLanguage = 'de'
         break
+      case '0_9':
+        txtLanguage = 'uk'
+        break
       default:
         break
     }

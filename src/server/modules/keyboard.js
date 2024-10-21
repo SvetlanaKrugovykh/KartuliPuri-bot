@@ -4,7 +4,7 @@ const buttonsConfig = {
       pl: 'Proszę wybrać dzialanie',
       en: 'Please select an action',
       de: 'Bitte wählen Sie eine Aktion',
-      ua: 'Оберіть, будь ласка, дію'
+      uk: 'Оберіть, будь ласка, дію'
     },
     options: [{ resize_keyboard: true }],
     buttons: {
@@ -18,7 +18,7 @@ const buttonsConfig = {
       en: [
         [{ text: '📜 Download the menu', callback_data: '0_3' }],
         [{ text: '📝 Your orders', callback_data: '0_5' }],
-        [{ text: '🇵🇱 🇬🇧 🇩🇪 🇺🇦 Select a language', callback_data: '0_1' }],
+        [{ text: '🇵🇱 🇬🇧 🇩🇪 🇺🇦 Select a langukge', callback_data: '0_1' }],
         [{ text: '✉︎ Ask us about anything in our business', callback_data: '0_2' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ],
@@ -29,7 +29,7 @@ const buttonsConfig = {
         [{ text: '✉︎ Fragen Sie uns nach allem in unserem Geschäft', callback_data: '0_2' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ],
-      ua: [
+      uk: [
         [{ text: '📜 Завантажити меню', callback_data: '0_3' }],
         [{ text: '📝 Ваші замовлення', callback_data: '0_5' }],
         [{ text: '🇵🇱 🇬🇧 🇩🇪 🇺🇦 Виберіть мову', callback_data: '0_1' }],
@@ -41,9 +41,9 @@ const buttonsConfig = {
   guestChooseLanguage: {
     title: {
       pl: 'Proszę wybrać język',
-      en: 'Please select a language',
+      en: 'Please select a langukge',
       de: 'Bitte wählen Sie eine Sprache',
-      ua: 'Оберіть, будь ласка, мову'
+      uk: 'Оберіть, будь ласка, мову'
     },
     options: [{ resize_keyboard: true }],
     buttons: {
@@ -71,7 +71,7 @@ const buttonsConfig = {
         [{ text: '↩️', callback_data: '0_12' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ],
-      ua: [
+      uk: [
         [{ text: '🇵🇱 Polski', callback_data: '0_6' }],
         [{ text: '🇬🇧 English', callback_data: '0_7' }],
         [{ text: '🇩🇪 Deutsch', callback_data: '0_8' }],
@@ -86,7 +86,7 @@ const buttonsConfig = {
       pl: 'Proszę wybrać dzialanie',
       en: 'Please select an action',
       de: 'Bitte wählen Sie eine Aktion',
-      ua: 'Оберіть, будь ласка, дію'
+      uk: 'Оберіть, будь ласка, дію'
     },
     options: [{ resize_keyboard: true }],
     buttons: {
@@ -111,7 +111,7 @@ const buttonsConfig = {
         [{ text: '📕 Anfragen, die Ihre Klärung benötigen??????', callback_data: '2_11' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ],
-      ua: [
+      uk: [
         [{ text: '➕ Створити нове замовлення', callback_data: '2_1' }],
         [{ text: '📒 Замовлення до отримання', callback_data: '2_3' }],
         [{ text: '📗 Переглянути замовлення, що вже є виконаними раніше', callback_data: '2_4' }],
@@ -120,46 +120,6 @@ const buttonsConfig = {
       ]
     }
   },
-
-  // clientAdminStarterButtons: {
-  //   title: 'Оберіть, будь ласка, дію',
-  //   options: [{ resize_keyboard: true }],
-  //   buttons: [
-  //     [{ text: 'Отримати інформацію про користувача', callback_data: '3_1' }],
-  //     [{ text: 'Надіслати відповідь на звернення', callback_data: '3_2' }],
-  //     [{ text: '🏠', callback_data: '0_4' }]
-  //   ]
-  // },
-  // chooseSenMessageSettings: {
-  //   title: 'Оберіть, будь ласка, отримувачів повідомлення:',
-  //   options: [{ resize_keyboard: true }],
-  //   buttons: [
-  //     [{ text: '🤽‍♂️ Обрати підрозділ(и) зі списку', callback_data: '19_1' }],
-  //     [{ text: '🤽‍♀️ Обрати користувачів зі списку в підрозділах', callback_data: '19_2' }],
-  //     [{ text: '👦🏼 Знайти користувача', callback_data: '19_3' }],
-  //     [{ text: '🤽‍♀️ Показати список отримувачів (тут обрати - це видалити)', callback_data: '19_5' }],
-  //     [{ text: '📧 Сформувати та надіслати повідомлення', callback_data: '19_4' }],
-  //     [{ text: '↩️', callback_data: '3_3' }]
-  //   ]
-  // },
-  // chooseTypeOfPeriod: {
-  //   title: 'Оберіть, будь ласка, період формування звіту:',
-  //   options: [{ resize_keyboard: true }],
-  //   buttons: [
-  //     [
-  //       { text: '🌗 Останній місяць (останні 30 днів)', callback_data: 'last_month' },
-  //       { text: '🌔 Останній тиждень (останні 7 днів)', callback_data: 'last_week' }
-  //     ],
-  //     [
-  //       { text: '🌛🌜 Довільний період', callback_data: 'any_period' },
-  //       { text: '🌕 Останній рік (останні 365 днів)', callback_data: 'last_year' }
-  //     ],
-  //     [
-  //       { text: '🌙 Сьогодні', callback_data: 'today' },
-  //       { text: '↖️', callback_data: 'x_x' }
-  //     ]
-  //   ]
-  // },
 
 }
 
@@ -190,7 +150,7 @@ const texts = {
     '0_5': 'Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten.',
     '0_6': 'Entschuldigung, Sie sind zu weit von unserem Café entfernt, um eine Bestellung aufzugeben.',
   },
-  ua: {
+  uk: {
     '0_1': 'Вибачте, сталася помилка під час відправлення файлу.',
     '0_2': 'Залиште текстове повідомлення нижче.',
     '0_3': 'Ви не залишили змістовного повідомлення. Будь ласка, спробуйте ще раз',

@@ -23,11 +23,18 @@ module.exports.commonStartMenu = async function (bot, msg) {
 
 module.exports.userMenu = async function (bot, msg, lang = "en") {
   let selectedByUser_ = { ...selectedByUser, language: lang, id: msg.chat.id, name: msg.chat.username + '---' + msg.chat.first_name + ' ' + msg.chat.last_name }
-  const response = await sendReqToDB('__CheckTlgClient__', selectedByUser_, msg.chat.id)
-  const parsedResponse = JSON.parse(response)
-  const lang_ = parsedResponse.ResponseArray?.[0]?.language || 'pl'
-  console.log('CheckTlgClient:', response)
-  if (response?.includes("authorized")) {
+  let lang_ = selectedByUser_?.language || 'pl'
+  let authorized = false
+  try {
+    const response = await sendReqToDB('__CheckTlgClient__', selectedByUser_, msg.chat.id)
+    console.log('CheckTlgClient:', response)
+    authorized = response?.includes("authorized")
+    const parsedResponse = JSON.parse(response)
+    lang_ = parsedResponse.ResponseArray?.[0]?.language || 'pl'
+  } catch (err) {
+    console.log(err)
+  }
+  if (authorized) {
     await module.exports.usersStarterMenu(bot, msg, lang_)
   } else {
     await module.exports.guestMenu(bot, msg, lang)
