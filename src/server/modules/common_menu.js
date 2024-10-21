@@ -241,3 +241,22 @@ module.exports.ordersMenu = async function (bot, msg, lang = "en") {
     }
   })
 }
+
+module.exports.sendOrder = async function (bot, msg, lang = "en") {
+  const chatId = msg.chat.id
+  const selectedProducts = globalBuffer[chatId]?.selectedProducts
+  if (!Array.isArray(selectedProducts) || selectedProducts.length === 0) {
+    await bot.sendMessage(chatId, texts[lang]['0_9'])
+    return
+  }
+
+  const products = selectedProducts.map(productId => menuItems[lang][productId].description).join(', ')
+  await bot.sendMessage(chatId, `${texts[lang]['0_10']} ${products}`, {
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: texts[lang]['0_11'], callback_data: 'send_order' }],
+        [{ text: texts[lang]['0_12'], callback_data: 'cancel_order' }]
+      ]
+    }
+  })
+}

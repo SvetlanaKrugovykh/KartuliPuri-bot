@@ -19,6 +19,18 @@ bot.on('callback_query', async (callbackQuery) => {
     if (globalBuffer[chatId] === undefined) globalBuffer[chatId] = {}
     const selectedProducts = globalBuffer[chatId].selectedProducts || []
 
+    if (callbackQuery.data === 'send_order') {
+      console.log('send_order')
+      await bot.sendMessage(chatId, 'Order sent')
+      return
+    }
+    if (callbackQuery.data === 'cancel_order') {
+      console.log('cancel_order')
+      globalBuffer[chatId].selectedProducts = []
+      await bot.sendMessage(chatId, 'Order canceled')
+      return
+    }
+
     if (callbackQuery.data.startsWith('73_')) {
       let title = texts[lang]['0_7']
       const selectedProduct = callbackQuery.data

@@ -82,10 +82,7 @@ async function handler(bot, msg, webAppUrl) {
       await menu.removeProducts(bot, msg, lang, 'finalize')
       break
     case '3_3':
-      //await clientsAdminResponseToRequest(bot, msg)
-      break
-    case '3_4':
-      //await clientsAdminResponseToRequest(bot, msg)
+      await menu.sendOrder(bot, msg)
       break
     case '13_3':
       await bot.sendMessage(msg.chat.id, `Ok!\n`, {
