@@ -160,6 +160,7 @@ const buttonsConfig = {
 
 const texts = {
   en: {
+    '0_0': 'We are open /n Monday - Friday 8:00 - 17:00 /n Saturday 9-15:00',
     '0_1': 'Sorry, there was an error sending the file.',
     '0_2': 'Leave a text message below.',
     '0_3': 'You have not left a meaningful message. Please try again',
@@ -175,6 +176,7 @@ const texts = {
     '0_13': 'To send the message, select the products',
   },
   pl: {
+    '0_0': 'Jesteśmy otwarci /n poniedziałek - piątek 8:00 - 17:00 /n sobota 9-15:00',
     '0_1': 'Przepraszamy, wystąpił błąd podczas wysyłania pliku.',
     '0_2': 'Pozostaw poniżej wiadomość tekstową.',
     '0_3': 'Nie zostawiłeś sensownej wiadomości. Spróbuj ponownie',
@@ -190,6 +192,7 @@ const texts = {
     '0_13': 'Aby wysłać wiadomość, wybierz produkty',
   },
   de: {
+    '0_0': 'Wir sind geöffnet /n Montag - Freitag 8:00 - 17:00 /n Samstag 9-15:00',
     '0_1': 'Entschuldigung, beim Senden der Datei ist ein Fehler aufgetreten.',
     '0_2': 'Hinterlassen Sie unten eine Textnachricht.',
     '0_3': 'Sie haben keine sinnvolle Nachricht hinterlassen. Bitte versuchen Sie es erneut',
@@ -205,6 +208,7 @@ const texts = {
     '0_13': 'Um die Nachricht zu senden, wählen Sie die Produkte aus',
   },
   uk: {
+    '0_0': 'Ми працюємо /n Понеділок - П\'ятниця 8:00 - 17:00 /n Субота 9-15:00',
     '0_1': 'Вибачте, сталася помилка під час відправлення файлу.',
     '0_2': 'Залиште текстове повідомлення нижче.',
     '0_3': 'Ви не залишили змістовного повідомлення. Будь ласка, спробуйте ще раз',
