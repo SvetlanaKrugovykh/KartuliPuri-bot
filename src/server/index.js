@@ -27,13 +27,13 @@ bot.on('callback_query', async (callbackQuery) => {
       globalBuffer[chatId].selectedProducts = []
       globalBuffer[chatId].selectionProductsFlag = false
       globalBuffer[chatId].selectionFlag = false
-      await bot.sendMessage(chatId, texts[lang]['0_11'])
       return
     }
     if (callbackQuery.data === 'cancel_order') {
       console.log('cancel_order')
       globalBuffer[chatId].selectedProducts = []
-      await bot.sendMessage(chatId, texts[lang]['0_12'])
+      globalBuffer[chatId].selectionProductsFlag = false
+      globalBuffer[chatId].selectionFlag = false
       return
     }
 

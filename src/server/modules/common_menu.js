@@ -8,6 +8,7 @@ const { globalBuffer, selectedByUser } = require('../globalBuffer')
 const { getProducts } = require('./common_functions')
 const geo = require('./geo')
 const { menuItems } = require('../data/consts')
+const { generateIntervals } = require('../services/timeService')
 
 
 module.exports.commonStartMenu = async function (bot, msg, home = false) {
@@ -57,7 +58,8 @@ module.exports.userMenu = async function (bot, msg, lang = "en", home = false) {
 }
 
 module.exports.guestMenu = async function (bot, msg, lang = "en") {
-  await bot.sendMessage(msg.chat.id, `The chatbot <b>${process.env.BRAND_NAME}</b> is here to welcome you, <b>${msg.chat.first_name} ${msg.chat.last_name}</b>!`, { parse_mode: "HTML" })
+  await bot.sendMessage(msg.chat.id, `<b>${process.env.BRAND_NAME}</b> ${texts[lang]['welcome']} <b>${msg.chat.first_name} ${msg.chat.last_name}</b>!`, { parse_mode: "HTML" })
+  await bot.sendMessage(msg.chat.id, texts[lang]['0_0'], { parse_mode: "HTML" })
   await bot.sendMessage(msg.chat.id, buttonsConfig["guestMenu"].title[lang], {
     reply_markup: {
       keyboard: buttonsConfig["guestMenu"].buttons[lang],
@@ -218,8 +220,8 @@ module.exports.removeProducts = async function (bot, msg, lang, operation) {
       title: texts[lang]['0_10'],
       options: [{ resize_keyboard: true }],
       buttons: selectedProducts.map(productId => {
-        const product = menuItems[lang][productId];
-        return [{ text: `👦🏼 ${product.description}`, callback_data: productId }];
+        const product = menuItems[lang][productId]
+        return [{ text: `🤽🏿‍♂️ ${product.description}`, callback_data: productId }]
       })
     }
 
@@ -250,13 +252,37 @@ module.exports.sendOrder = async function (bot, msg, lang = "en") {
     return
   }
 
-  const products = selectedProducts.map(productId => menuItems[lang][productId].description).join(', ')
-  await bot.sendMessage(chatId, `${texts[lang]['0_10']} ${products}`, {
+  const products = selectedProducts
+    .map(productId => `<b>${menuItems[lang][productId].description}</b>`)
+    .join('\n')
+
+  await bot.sendMessage(chatId, `${texts[lang]['0_10']}\n${products}`, {
+    parse_mode: "HTML",
     reply_markup: {
       inline_keyboard: [
         [{ text: texts[lang]['0_11'], callback_data: 'send_order' }],
         [{ text: texts[lang]['0_12'], callback_data: 'cancel_order' }]
       ]
+    }
+  })
+}
+
+module.exports.ChooseTime = async function (bot, msg, lang = "en") {
+  const chatId = msg.chat.id
+  const intervals = generateIntervals(lang)
+
+  const todayButtons = intervals.today.intervals.map(time => [{ text: time, callback_data: `time_${time}` }])
+  const tomorrowButtons = intervals.tomorrow.intervals.map(time => [{ text: time, callback_data: `time_${time}` }])
+
+  await bot.sendMessage(chatId, intervals.today.label, {
+    reply_markup: {
+      inline_keyboard: todayButtons
+    }
+  })
+
+  await bot.sendMessage(chatId, intervals.tomorrow.label, {
+    reply_markup: {
+      inline_keyboard: tomorrowButtons
     }
   })
 }

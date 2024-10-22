@@ -74,6 +74,9 @@ async function handler(bot, msg, webAppUrl) {
     case '3_3':
       await menu.sendOrder(bot, msg, lang)
       break
+    case '3_4':
+      await menu.ChooseTime(bot, msg, lang)
+      break
     case '13_3':
       await bot.sendMessage(msg.chat.id, `Ok!\n`, {
         reply_markup: {
@@ -97,7 +100,7 @@ async function blockMenu(bot, msg) {
 
 //#region dynamicKeyboads
 async function switchDynamicSceenes(bot, msg) {
-  const timeSymbols = ['🌗', '🌔', '🌛', '🌜', '🌕', '🌙'];
+  const timeSymbols = ['🕖']
   try {
     if (msg.text.includes('🟦')) {
       await OrderApprovalScene('', bot, '', msg, null, true)
@@ -135,7 +138,7 @@ async function switchDynamicSceenes(bot, msg) {
       await reports(bot, msg)
       return
     }
-    if (/[🏠🟣🔵🧷📌✉✔️➕📕📒📗📊📘💹]/.test(msg.text)) {
+    if (/[🏠🟣🔵🧷📌✉✔️➕📕📒📗📘]/.test(msg.text)) {
       goBack(bot, msg)
       return
     }

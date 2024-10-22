@@ -91,28 +91,28 @@ const buttonsConfig = {
     options: [{ resize_keyboard: true }],
     buttons: {
       pl: [
-        [{ text: '➕ Utwórz nowe zamówienia', callback_data: '2_1' }],
+        [{ text: '📌 Utwórz nowe zamówienia', callback_data: '2_1' }],
         [{ text: '📒 Zamówienia czekają na odbiór osobisty', callback_data: '2_3' }],
         [{ text: '📗 Przeglądaj zakończone Zamówienia', callback_data: '2_4' }],
         [{ text: '📕 Zamówienia wymagające Twojego uzupełnienia', callback_data: '2_11' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ],
       en: [
-        [{ text: '➕ Create a new order', callback_data: '2_1' }],
+        [{ text: '📌 Create a new order', callback_data: '2_1' }],
         [{ text: '📒 Ready to get', callback_data: '2_3' }],
         [{ text: '📗 View completed orders', callback_data: '2_4' }],
         [{ text: '📕 Requests needing your clarification', callback_data: '2_11' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ],
       de: [
-        [{ text: '➕ Neue Anfrage erstellen??????', callback_data: '2_1' }],
+        [{ text: '📌 Neue Anfrage erstellen??????', callback_data: '2_1' }],
         [{ text: '📒 Offene Anfragen anzeigen??????', callback_data: '2_3' }],
         [{ text: '📗 Abgeschlossene Anfragen anzeigen??????', callback_data: '2_4' }],
         [{ text: '📕 Anfragen, die Ihre Klärung benötigen??????', callback_data: '2_11' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ],
       uk: [
-        [{ text: '➕ Створити нове замовлення', callback_data: '2_1' }],
+        [{ text: '📌 Створити нове замовлення', callback_data: '2_1' }],
         [{ text: '📒 Замовлення до отримання', callback_data: '2_3' }],
         [{ text: '📗 Переглянути замовлення, що вже є виконаними раніше', callback_data: '2_4' }],
         [{ text: '📕 Замовлення, за якими Ви не прийшли', callback_data: '2_11' }],
@@ -130,27 +130,31 @@ const buttonsConfig = {
     options: [{ resize_keyboard: true }],
     buttons: {
       pl: [
-        [{ text: '📝 Dodaj produkt', callback_data: '3_1' }],
-        [{ text: '📝 Usuń produkt', callback_data: '3_2' }],
-        [{ text: '📝 Wyślij zamówienie', callback_data: '3_3' }],
+        [{ text: '🧲 Dodaj produkt', callback_data: '3_1' }],
+        [{ text: '❌ Usuń produkt', callback_data: '3_2' }],
+        [{ text: '🕖 Wybierz czas, w którym chcesz go otrzymać', callback_data: '3_4' }],
+        [{ text: '✅ Wyślij zamówienie', callback_data: '3_3' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ],
       en: [
-        [{ text: '📝 Add a product', callback_data: '3_1' }],
-        [{ text: '📝 Remove a product', callback_data: '3_2' }],
-        [{ text: '📝 Send the order', callback_data: '3_3' }],
+        [{ text: '🧲 Add a product', callback_data: '3_1' }],
+        [{ text: '❌ Remove a product', callback_data: '3_2' }],
+        [{ text: '🕖 Choose the time to get it', callback_data: '3_4' }],
+        [{ text: '✅ Send the order', callback_data: '3_3' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ],
       de: [
-        [{ text: '📝 Produkt hinzufügen', callback_data: '3_1' }],
-        [{ text: '📝 Produkt entfernen', callback_data: '3_2' }],
-        [{ text: '📝 Bestellung senden', callback_data: '3_3' }],
+        [{ text: '🧲 Produkt hinzufügen', callback_data: '3_1' }],
+        [{ text: '❌ Produkt entfernen', callback_data: '3_2' }],
+        [{ text: '🕖 Wählen Sie die Zeit, zu der Sie es erhalten möchten', callback_data: '3_4' }],
+        [{ text: '✅ Bestellung senden', callback_data: '3_3' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ],
       uk: [
-        [{ text: '📝 Додати продукт', callback_data: '3_1' }],
-        [{ text: '📝 Видалити продукт', callback_data: '3_2' }],
-        [{ text: '📝 Відправити замовлення', callback_data: '3_3' }],
+        [{ text: '🧲 Додати продукт', callback_data: '3_1' }],
+        [{ text: '❌ Видалити продукт', callback_data: '3_2' }],
+        [{ text: '🕖 Виберіть час, коли хочете отримати замовлення', callback_data: '3_4' }],
+        [{ text: '✅ Відправити замовлення', callback_data: '3_3' }],
         [{ text: '🏠', callback_data: '0_4' }]
       ]
     },
@@ -160,7 +164,8 @@ const buttonsConfig = {
 
 const texts = {
   en: {
-    '0_0': 'We are open /n Monday - Friday 8:00 - 17:00 /n Saturday 9-15:00',
+    'welcome': 'is here to welcome you,',
+    '0_0': 'We are open \n <b>Monday - Friday 8:00 - 17:00 </b>\n <b>Saturday 9:00-15:00</b>',
     '0_1': 'Sorry, there was an error sending the file.',
     '0_2': 'Leave a text message below.',
     '0_3': 'You have not left a meaningful message. Please try again',
@@ -176,7 +181,8 @@ const texts = {
     '0_13': 'To send the message, select the products',
   },
   pl: {
-    '0_0': 'Jesteśmy otwarci /n poniedziałek - piątek 8:00 - 17:00 /n sobota 9-15:00',
+    'welcome': 'jest tutaj, aby Cię przywitać,',
+    '0_0': 'Jesteśmy otwarci \n <b>poniedziałek - piątek 8:00 - 17:00</b> \n <b>sobota 9:00-15:00</b>',
     '0_1': 'Przepraszamy, wystąpił błąd podczas wysyłania pliku.',
     '0_2': 'Pozostaw poniżej wiadomość tekstową.',
     '0_3': 'Nie zostawiłeś sensownej wiadomości. Spróbuj ponownie',
@@ -192,7 +198,8 @@ const texts = {
     '0_13': 'Aby wysłać wiadomość, wybierz produkty',
   },
   de: {
-    '0_0': 'Wir sind geöffnet /n Montag - Freitag 8:00 - 17:00 /n Samstag 9-15:00',
+    'welcome': 'ist hier, um Sie zu begrüßen,',
+    '0_0': 'Wir sind geöffnet \n <b>Montag - Freitag 8:00 - 17:00 </b>\n <b>Samstag 9:00-15:00</b>',
     '0_1': 'Entschuldigung, beim Senden der Datei ist ein Fehler aufgetreten.',
     '0_2': 'Hinterlassen Sie unten eine Textnachricht.',
     '0_3': 'Sie haben keine sinnvolle Nachricht hinterlassen. Bitte versuchen Sie es erneut',
@@ -208,7 +215,8 @@ const texts = {
     '0_13': 'Um die Nachricht zu senden, wählen Sie die Produkte aus',
   },
   uk: {
-    '0_0': 'Ми працюємо /n Понеділок - П\'ятниця 8:00 - 17:00 /n Субота 9-15:00',
+    'welcome': 'тут, щоб привітати вас,',
+    '0_0': 'Ми працюємо \n </b>Понеділок - П\'ятниця 8:00 - 17:00</b> \n <b>Субота 9:00-15:00</b>',
     '0_1': 'Вибачте, сталася помилка під час відправлення файлу.',
     '0_2': 'Залиште текстове повідомлення нижче.',
     '0_3': 'Ви не залишили змістовного повідомлення. Будь ласка, спробуйте ще раз',
