@@ -1,8 +1,5 @@
 const { buttonsConfig } = require('../modules/keyboard')
-const { clientsAdminGetInfo, clientsAdminResponseToRequest, userApproveOrDecline } = require('./clientsAdmin')
-const { askForAttachment } = require('../services/attachment.service')
-const { reports, everyDayOrWeek } = require('./reportsMenu')
-const { msgSenderMenu, messageSender } = require('./msgSenderMenu')
+const { reports } = require('./reportsMenu')
 const { users } = require('../users/users.model')
 const menu = require('../modules/common_menu')
 const { saveLanguage } = require('../modules/common_functions')
@@ -66,13 +63,6 @@ async function handler(bot, msg, webAppUrl) {
       lang = selectedByUser[chatId]?.language || 'pl'
       await menu.ordersMenu(bot, msg, lang)
       break
-    case '2_7':
-      selectedByUser[chatId] = {}
-      globalBuffer[chatId].selectedProducts = []
-      globalBuffer[chatId].selectionProductsFlag = false
-      globalBuffer[chatId].selectionFlag = false
-      await msgSenderMenu(bot, msg)
-      break
     case '3_1':
       const inZone = await menu.checkLocation(bot, msg)
       if (!inZone) return
@@ -82,7 +72,7 @@ async function handler(bot, msg, webAppUrl) {
       await menu.removeProducts(bot, msg, lang, 'finalize')
       break
     case '3_3':
-      await menu.sendOrder(bot, msg)
+      await menu.sendOrder(bot, msg, lang)
       break
     case '13_3':
       await bot.sendMessage(msg.chat.id, `Ok!\n`, {

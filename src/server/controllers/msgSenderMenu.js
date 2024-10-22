@@ -1,5 +1,6 @@
 const { buttonsConfig } = require('../modules/keyboard')
 const { globalBuffer } = require('../globalBuffer')
+const { menuItems } = require('../data/consts')
 const fs = require('fs')
 require('dotenv').config()
 
@@ -17,19 +18,22 @@ module.exports.msgSenderMenu = async function (bot, msg) {
   })
 }
 
-module.exports.messageCreateScene = async function (bot, msg) {
+module.exports.sendAcceptedOrder = async function (bot, msg, lang = "en") {
   try {
-    if (globalBuffer[msg.chat.id]?.selectedCustomers === undefined) {
-      await bot.sendMessage(msg.chat.id, 'Для можливості відправки повідомлення оберіть отримувача/ів')
+    if (globalBuffer[msg.chat.id]?.selectedProducts === undefined) {
+      await bot.sendMessage(msg.chat.id, texts[lang]['0_13'])
       return false
     }
-    await bot.sendMessage(msg.chat.id, buttonsConfig["messageCreate"].title, {
-      reply_markup: {
-        keyboard: buttonsConfig["messageCreate"].buttons,
-        resize_keyboard: true,
-        one_time_keyboard: false
-      }
-    })
+    const GROUP_ID = process.env.GROUP_ID
+    const selectedProducts = globalBuffer[msg.chat.id]?.selectedProducts
+    if (!Array.isArray(selectedProducts) || selectedProducts.length === 0) {
+      await bot.sendMessage(msg.chat.id, texts[lang]['0_9'])
+      return
+    }
+
+    const products = selectedProducts.map(productId => menuItems[lang][productId].description).join(', ')
+    await bot.sendMessage(GROUP_ID, `Order from ${msg.chat.id}:\n${products}`)
+
   } catch (err) {
     console.log(err)
   }

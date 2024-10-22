@@ -172,6 +172,7 @@ const texts = {
     '0_10': 'Selected products',
     '0_11': 'Send Order',
     '0_12': 'Cancel Order',
+    '0_13': 'To send the message, select the products',
   },
   pl: {
     '0_1': 'Przepraszamy, wystąpił błąd podczas wysyłania pliku.',
@@ -186,6 +187,7 @@ const texts = {
     '0_10': 'Wybrane produkty',
     '0_11': 'Wyślij zamówienie',
     '0_12': 'Anuluj zamówienie',
+    '0_13': 'Aby wysłać wiadomość, wybierz produkty',
   },
   de: {
     '0_1': 'Entschuldigung, beim Senden der Datei ist ein Fehler aufgetreten.',
@@ -200,6 +202,7 @@ const texts = {
     '0_10': 'Ausgewählte Produkte',
     '0_11': 'Bestellung senden',
     '0_12': 'Bestellung abbrechen',
+    '0_13': 'Um die Nachricht zu senden, wählen Sie die Produkte aus',
   },
   uk: {
     '0_1': 'Вибачте, сталася помилка під час відправлення файлу.',
@@ -214,6 +217,7 @@ const texts = {
     '0_10': 'Вибрані продукти',
     '0_11': 'Відправити замовлення',
     '0_12': 'Скасувати замовлення',
+    '0_13': 'Для відправлення повідомлення виберіть продукти',
   }
 }
 module.exports = { buttonsConfig, texts }
