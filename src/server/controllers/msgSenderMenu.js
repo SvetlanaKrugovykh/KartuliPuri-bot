@@ -32,8 +32,9 @@ module.exports.sendAcceptedOrder = async function (bot, msg, lang = "en") {
 module.exports.sayTimePeriod = function (chatId, time, lang) {
   let timeTakeOff = texts[lang]['0_14'] || ''
   globalBuffer[chatId].selectedTime = time
-  const selectedTime = time.replace('1_time', translations[lang].tomorrow)
-    .replace('0_time', translations[lang].today)
-    .replace('_', '📎')
+  const selectedTime = time
+    ? time.replace('1_time', translations[lang].tomorrow)
+      .replace('0_time', translations[lang].today)
+      .replace('_', '📎') : 'Time not specified'
   return `${timeTakeOff}: ${selectedTime}`
 }

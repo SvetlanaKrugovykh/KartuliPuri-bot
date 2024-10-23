@@ -1,7 +1,7 @@
 const { clientAdminMenuStarter } = require('../controllers/clientsAdmin')
 require('dotenv').config()
 const { buttonsConfig, texts } = require('./keyboard')
-const sendReqToDB = require('../modules/tlg_to_DB')
+const { sendReqToDB } = require('../modules/tlg_to_DB')
 const { users } = require('../users/users.model')
 const path = require('path')
 const { globalBuffer, selectedByUser } = require('../globalBuffer')
@@ -9,6 +9,7 @@ const { getProducts } = require('./common_functions')
 const geo = require('./geo')
 const { menuItems } = require('../data/consts')
 const { generateIntervals } = require('../services/timeService')
+const { sayTimePeriod } = require('../controllers/msgSenderMenu')
 
 
 module.exports.commonStartMenu = async function (bot, msg, home = false) {
@@ -256,7 +257,7 @@ module.exports.sendOrder = async function (bot, msg, lang = "en") {
     .map(productId => `<b>${menuItems[lang][productId].description}</b>`)
     .join('\n')
 
-  await bot.sendMessage(chatId, `${texts[lang]['0_10']}\n${products}`, {
+  await bot.sendMessage(chatId, `${texts[lang]['0_10']}\n${products}\n${sayTimePeriod(msg.chat.id, globalBuffer[msg.chat.id]?.selectedTime, lang)}`, {
     parse_mode: "HTML",
     reply_markup: {
       inline_keyboard: [

@@ -7,6 +7,7 @@ const { bot, globalBuffer, selectedByUser } = require('./globalBuffer')
 const { texts } = require('./modules/keyboard')
 const { menuItems } = require('./data/consts')
 const { sendAcceptedOrder, sayTimePeriod } = require('./controllers/msgSenderMenu')
+const { sendOrderToDB } = require('./modules/tlg_to_DB')
 
 const app = Fastify({
   trustProxy: true
@@ -27,6 +28,7 @@ bot.on('callback_query', async (callbackQuery) => {
     if (callbackQuery.data === 'send_order') {
       console.log('send_order')
       await sendAcceptedOrder(bot, callbackQuery.message, lang)
+      await sendOrderToDB(chatId, selectedProducts, globalBuffer[chatId].selectedTime, lang)
       selectedByUser[chatId] = {}
       globalBuffer[chatId].selectedProducts = []
       globalBuffer[chatId].selectionProductsFlag = false
