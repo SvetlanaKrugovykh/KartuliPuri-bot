@@ -6,7 +6,7 @@ const { isThisGroupId } = require('./modules/bot')
 const { bot, globalBuffer, selectedByUser } = require('./globalBuffer')
 const { texts } = require('./modules/keyboard')
 const { menuItems } = require('./data/consts')
-const { sendAcceptedOrder } = require('./controllers/msgSenderMenu')
+const { sendAcceptedOrder, sayTimePeriod } = require('./controllers/msgSenderMenu')
 
 const app = Fastify({
   trustProxy: true
@@ -20,6 +20,10 @@ bot.on('callback_query', async (callbackQuery) => {
     if (globalBuffer[chatId] === undefined) globalBuffer[chatId] = {}
     const selectedProducts = globalBuffer[chatId].selectedProducts || []
 
+    if (callbackQuery.data.includes('_time_')) {
+      await bot.sendMessage(chatId, sayTimePeriod(callbackQuery.message.chat.id, callbackQuery.data, lang))
+    }
+
     if (callbackQuery.data === 'send_order') {
       console.log('send_order')
       await sendAcceptedOrder(bot, callbackQuery.message, lang)
@@ -27,6 +31,7 @@ bot.on('callback_query', async (callbackQuery) => {
       globalBuffer[chatId].selectedProducts = []
       globalBuffer[chatId].selectionProductsFlag = false
       globalBuffer[chatId].selectionFlag = false
+      globalBuffer[chatId].selectedTime = ''
       return
     }
     if (callbackQuery.data === 'cancel_order') {
@@ -34,6 +39,7 @@ bot.on('callback_query', async (callbackQuery) => {
       globalBuffer[chatId].selectedProducts = []
       globalBuffer[chatId].selectionProductsFlag = false
       globalBuffer[chatId].selectionFlag = false
+      globalBuffer[chatId].selectedTime = ''
       return
     }
 

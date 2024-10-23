@@ -1,5 +1,4 @@
 const { buttonsConfig } = require('../modules/keyboard')
-const { reports } = require('./reportsMenu')
 const { users } = require('../users/users.model')
 const menu = require('../modules/common_menu')
 const { saveLanguage } = require('../modules/common_functions')

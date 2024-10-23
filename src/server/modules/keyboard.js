@@ -179,6 +179,7 @@ const texts = {
     '0_11': 'Send Order',
     '0_12': 'Cancel Order',
     '0_13': 'To send the message, select the products',
+    '0_14': 'Time of order obtaining',
   },
   pl: {
     'welcome': 'jest tutaj, aby Cię przywitać,',
@@ -196,6 +197,7 @@ const texts = {
     '0_11': 'Wyślij zamówienie',
     '0_12': 'Anuluj zamówienie',
     '0_13': 'Aby wysłać wiadomość, wybierz produkty',
+    '0_14': 'Czas odbioru zamówienia',
   },
   de: {
     'welcome': 'ist hier, um Sie zu begrüßen,',
@@ -213,6 +215,7 @@ const texts = {
     '0_11': 'Bestellung senden',
     '0_12': 'Bestellung abbrechen',
     '0_13': 'Um die Nachricht zu senden, wählen Sie die Produkte aus',
+    '0_14': 'Zeit der Bestellannahme',
   },
   uk: {
     'welcome': 'тут, щоб привітати вас,',
@@ -230,6 +233,7 @@ const texts = {
     '0_11': 'Відправити замовлення',
     '0_12': 'Скасувати замовлення',
     '0_13': 'Для відправлення повідомлення виберіть продукти',
+    '0_14': 'Час отримання замовлення',
   }
 }
 module.exports = { buttonsConfig, texts }

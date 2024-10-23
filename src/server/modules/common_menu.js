@@ -23,9 +23,9 @@ module.exports.commonStartMenu = async function (bot, msg, home = false) {
 }
 
 module.exports.userMenu = async function (bot, msg, lang = "en", home = false) {
-  if (!selectedByUser[msg.chat.id]) {
-    selectedByUser[msg.chat.id] = {}
-  }
+  if (!selectedByUser[msg.chat.id]) selectedByUser[msg.chat.id] = {}
+  if (!globalBuffer[msg.chat.id]) globalBuffer[msg.chat.id] = {}
+
 
   selectedByUser[msg.chat.id] = {
     ...selectedByUser[msg.chat.id],
@@ -46,13 +46,13 @@ module.exports.userMenu = async function (bot, msg, lang = "en", home = false) {
     console.log(err)
   }
 
-  selectedByUser[msg.chat.id].authorized = authorized
+  globalBuffer[msg.chat.id].authorized = authorized
 
   if (authorized && home) {
-    selectedByUser[msg.chat.id].authorized = true
+    globalBuffer[msg.chat.id].authorized = true
     await module.exports.usersStarterMenu(bot, msg, lang_)
   } else {
-    selectedByUser[msg.chat.id].authorized = false
+    globalBuffer[msg.chat.id].authorized = false
     await module.exports.guestMenu(bot, msg, lang)
   }
 }
@@ -164,7 +164,7 @@ module.exports.checkLocation = async function (bot, msg) {
   if (!selectedByUser[chatId]) selectedByUser[chatId] = {}
   if (!globalBuffer[chatId]) globalBuffer[chatId] = {}
 
-  if (!selectedByUser[chatId]?.authorized) {
+  if (!globalBuffer[chatId]?.authorized) {
     const cafeLocation = await geo.getCafeLocation()
     const clientLocation = await geo.requestLocation(bot, msg)
     const isWithinRange = await geo.checkDistance(cafeLocation, clientLocation)
@@ -225,7 +225,7 @@ module.exports.removeProducts = async function (bot, msg, lang, operation) {
       })
     }
 
-    await bot.sendMessage(chatId, texts[lang]['0_10'], {
+    await bot.sendMessage(chatId, `${texts[lang]['0_10']}`, {
       reply_markup: {
         inline_keyboard: productButtons.buttons,
         resize_keyboard: true
@@ -271,8 +271,8 @@ module.exports.ChooseTime = async function (bot, msg, lang = "en") {
   const chatId = msg.chat.id
   const intervals = generateIntervals(lang)
 
-  const todayButtons = intervals.today.intervals.map(time => [{ text: time, callback_data: `time_${time}` }])
-  const tomorrowButtons = intervals.tomorrow.intervals.map(time => [{ text: time, callback_data: `time_${time}` }])
+  const todayButtons = intervals.today.intervals.map(time => [{ text: `${intervals.today.label}📎${time}`, callback_data: `0_time_${time}` }])
+  const tomorrowButtons = intervals.tomorrow.intervals.map(time => [{ text: `${intervals.tomorrow.label}📎${time}`, callback_data: `1_time_${time}` }])
 
   await bot.sendMessage(chatId, intervals.today.label, {
     reply_markup: {
