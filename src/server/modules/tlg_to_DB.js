@@ -59,6 +59,7 @@ module.exports.sendOrderToDB = async (chatId, selectedProducts, selectedTime, la
     }
     const response = await module.exports.sendReqToDB('___CreateOrder__', data, chatId)
     console.log(response)
+    return response
   } catch (e) {
     console.log(e)
   }

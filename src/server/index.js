@@ -28,7 +28,14 @@ bot.on('callback_query', async (callbackQuery) => {
     if (callbackQuery.data === 'send_order') {
       console.log('send_order')
       await sendAcceptedOrder(bot, callbackQuery.message, lang)
-      await sendOrderToDB(chatId, selectedProducts, globalBuffer[chatId].selectedTime, lang)
+      const response = await sendOrderToDB(chatId, selectedProducts, globalBuffer[chatId].selectedTime, lang)
+      try {
+        const parsedResponse = JSON.parse(response)
+        const orderDetails = parsedResponse.ResponseArray[0]
+        await bot.sendMessage(chatId, `${texts[lang]['0_15']} ${orderDetails.order_total} PLN`)
+      } catch (e) {
+        console.log(e)
+      }
       selectedByUser[chatId] = {}
       globalBuffer[chatId].selectedProducts = []
       globalBuffer[chatId].selectionProductsFlag = false

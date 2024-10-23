@@ -180,6 +180,7 @@ const texts = {
     '0_12': 'Cancel Order',
     '0_13': 'To send the message, select the products',
     '0_14': 'Time of order obtaining',
+    '0_15': 'Your order has been accepted. Wait for the order to be ready for pickup. Total amount:',
   },
   pl: {
     'welcome': 'jest tutaj, aby Cię przywitać,',
@@ -198,6 +199,7 @@ const texts = {
     '0_12': 'Anuluj zamówienie',
     '0_13': 'Aby wysłać wiadomość, wybierz produkty',
     '0_14': 'Czas odbioru zamówienia',
+    '0_15': 'Twoje zamówienie zostało przyjęte. Poczekaj na gotowość zamówienia do odbioru. Kwota całkowita:',
   },
   de: {
     'welcome': 'ist hier, um Sie zu begrüßen,',
@@ -216,6 +218,7 @@ const texts = {
     '0_12': 'Bestellung abbrechen',
     '0_13': 'Um die Nachricht zu senden, wählen Sie die Produkte aus',
     '0_14': 'Zeit der Bestellannahme',
+    '0_15': 'Ihre Bestellung wurde angenommen. Warten darauf, dass die Bestellung zur Abholung bereit ist. Gesamtbetrag:',
   },
   uk: {
     'welcome': 'тут, щоб привітати вас,',
@@ -234,6 +237,7 @@ const texts = {
     '0_12': 'Скасувати замовлення',
     '0_13': 'Для відправлення повідомлення виберіть продукти',
     '0_14': 'Час отримання замовлення',
+    '0_15': 'Ваше замовлення прийнято. Очікуйте готовності замовлення для видачі. Загальна сума:',
   }
 }
 module.exports = { buttonsConfig, texts }
