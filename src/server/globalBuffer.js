@@ -1,6 +1,11 @@
 require('dotenv').config()
+
+
+if (!process.env.TELEGRAM_BOT_TOKEN) {
+  throw new Error('TELEGRAM_BOT_TOKEN is not defined')
+}
+
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
-console.log(TELEGRAM_BOT_TOKEN.substring(0, 5))
 
 const TelegramBot = require('node-telegram-bot-api')
 
