@@ -1,4 +1,7 @@
+require('dotenv').config()
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
+console.log(TELEGRAM_BOT_TOKEN.substring(0, 5))
+
 const TelegramBot = require('node-telegram-bot-api')
 
 const globalBuffer = {}
