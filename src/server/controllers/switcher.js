@@ -54,8 +54,8 @@ async function handler(bot, msg, webAppUrl) {
     case '0_7':
     case '0_8':
     case '0_9':
-      selected_ = await saveLanguage(bot, msg, data, selectedByUser[chatId])
-      if (selected_) selectedByUser[chatId] = selected_
+      const selected_ = await saveLanguage(bot, msg, data, selectedByUser[chatId])
+      if (selected_?.language) selectedByUser[chatId].language = selected_.language
       await menu.commonStartMenu(bot, msg)
       break
     case '2_1':

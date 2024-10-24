@@ -40,9 +40,15 @@ module.exports.userMenu = async function (bot, msg, lang = "en", home = false) {
   try {
     const response = await sendReqToDB('__CheckTlgClient__', selectedByUser[msg.chat.id], msg.chat.id)
     console.log('CheckTlgClient:', response)
-    const parsedResponse = JSON.parse(response)
-    authorized = parsedResponse.ResponseArray?.[0]?.authorized || false
-    lang_ = parsedResponse.ResponseArray?.[0]?.language || 'pl'
+    if (response !== null) {
+      const parsedResponse = JSON.parse(response)
+      authorized = parsedResponse.ResponseArray?.[0]?.authorized || false
+      lang_ = parsedResponse.ResponseArray?.[0]?.language || 'pl'
+    } else {
+      console.log('No response from DB')
+      lang_ = lang
+      selectedByUser[msg.chat.id].language = lang
+    }
   } catch (err) {
     console.log(err)
   }

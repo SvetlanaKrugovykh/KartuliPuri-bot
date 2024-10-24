@@ -1,5 +1,5 @@
 
-const sendReqToDB = require("../modules/tlg_to_DB")
+const { sendReqToDB } = require("../modules/tlg_to_DB")
 const { menuItems } = require('../data/consts')
 
 module.exports.saveLanguage = async function (bot, msg, menuItem, selectedByUser) {

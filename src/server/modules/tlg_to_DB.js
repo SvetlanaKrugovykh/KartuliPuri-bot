@@ -19,7 +19,7 @@ module.exports.sendReqToDB = async function (reqType, data, text) {
       data: {
         Query: `Execute;${reqType};${dataString};End`,
       }
-    });
+    })
     if (!response.status == 200) {
       console.log(response.status)
       return null
@@ -36,16 +36,14 @@ module.exports.sendReqToDB = async function (reqType, data, text) {
 }
 
 function objToString(reqType, data, text) {
-
   switch (reqType) {
     case '__CheckTlgClient__':
     case '___UserRegistration__':
-    case '___GetTgUserData__':
-      return `${text}#${data?.name}#${data?.language}`
+      return `${text}#${data?.name || ''}#${data?.language || ''}`
     case '___CreateOrder__':
-      return `${text}#${JSON.stringify(data)}#${data?.language}`
+      return `${text}#${JSON.stringify(data)}#${data?.language || ''}`
     default:
-      return `${data.id}#${text}`
+      return `${data.id || ''}#${text}`
   }
 }
 
