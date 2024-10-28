@@ -106,35 +106,35 @@ async function switchDynamicSceenes(bot, msg) {
       return
     }
     if (msg.text.includes('📕') || msg.text.includes('☎︎') || msg.text.includes('🖐')) {
-      await showOrderInfo(bot, msg, true)
-      const OrderID = msg.text.match(/\d+/)?.[0]
-      if (!OrderID) return null
-      selectedByUser[msg.chat.id].updatedOrderId = OrderID
-      console.log(`selectedByUser[${msg.chat.id}].updatedOrderId`, selectedByUser[msg.chat.id].updatedOrderId)
-      if (!msg.text.includes('🖐')) selectedByUser[msg.chat.id].customer_login = msg.chat.id
-      await OrderUpdateScene(bot, msg, OrderID)
+      // await showOrderInfo(bot, msg, true)
+      // const OrderID = msg.text.match(/\d+/)?.[0]
+      // if (!OrderID) return null
+      // selectedByUser[msg.chat.id].updatedOrderId = OrderID
+      // console.log(`selectedByUser[${msg.chat.id}].updatedOrderId`, selectedByUser[msg.chat.id].updatedOrderId)
+      // if (!msg.text.includes('🖐')) selectedByUser[msg.chat.id].customer_login = msg.chat.id
+      // await OrderUpdateScene(bot, msg, OrderID)
       return
     }
     if (msg.text.includes('🟨') || msg.text.includes('🟩')) {
-      await showOrderInfo(bot, msg)
+      // await showOrderInfo(bot, msg)
       return
     }
     if (msg.text.includes('💹')) {
-      await OrderApprove(bot, msg)
+      // await OrderApprove(bot, msg)
       return
 
     }
     if (msg.text.includes('⭕')) {
-      await OrderReturn(bot, msg)
+      // await OrderReturn(bot, msg)
       return
     }
     if (timeSymbols.some(symbol => msg.text.includes(symbol))) {
-      await selectPeriod(bot, msg)
-      await checkReadyForReport(bot, msg)
+      // await selectPeriod(bot, msg)
+      // await checkReadyForReport(bot, msg)
       return
     }
     if (msg.text.includes('↖️')) {
-      await reports(bot, msg)
+      // await reports(bot, msg)
       return
     }
     if (/[🏠🟣🔵🧷📌✉✔️➕📕📒📗📘]/.test(msg.text)) {
