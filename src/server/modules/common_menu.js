@@ -35,24 +35,7 @@ module.exports.userMenu = async function (bot, msg, lang = "en", home = false) {
     name: msg.chat.username + '---' + msg.chat.first_name + ' ' + msg.chat.last_name
   }
 
-  let lang_ = selectedByUser?.language || 'pl'
-  let authorized = false
-  try {
-    const response = await sendReqToDB('__CheckTlgClient__', selectedByUser[msg.chat.id], msg.chat.id)
-    console.log('CheckTlgClient:', response)
-    if (response !== null) {
-      const parsedResponse = JSON.parse(response)
-      authorized = parsedResponse.ResponseArray?.[0]?.authorized || false
-      lang_ = parsedResponse.ResponseArray?.[0]?.language || 'pl'
-    } else {
-      console.log('No response from DB')
-      lang_ = lang
-      selectedByUser[msg.chat.id].language = lang
-    }
-  } catch (err) {
-    console.log(err)
-  }
-
+  const { lang_, authorized } = await module.exports.checkTgUser(msg, lang)
   globalBuffer[msg.chat.id].authorized = authorized
 
   if (authorized && home) {
@@ -62,6 +45,31 @@ module.exports.userMenu = async function (bot, msg, lang = "en", home = false) {
     globalBuffer[msg.chat.id].authorized = false
     await module.exports.guestMenu(bot, msg, lang)
   }
+}
+
+module.exports.checkTgUser = async function (msg, lang = "en") {
+
+  const info = {
+    lang_: selectedByUser?.language || 'pl',
+    authorized: false
+  }
+
+  try {
+    const response = await sendReqToDB('__CheckTlgClient__', selectedByUser[msg.chat.id], msg.chat.id)
+    console.log('CheckTlgClient:', response)
+    if (response !== null) {
+      const parsedResponse = JSON.parse(response)
+      info.authorized = parsedResponse.ResponseArray?.[0]?.authorized || false
+      info.lang_ = parsedResponse.ResponseArray?.[0]?.language || 'pl'
+    } else {
+      console.log('No response from DB')
+      info.lang_ = lang
+      selectedByUser[msg.chat.id].language = lang
+    }
+  } catch (err) {
+    console.log(err)
+  }
+  return info
 }
 
 module.exports.guestMenu = async function (bot, msg, lang = "en") {
@@ -170,6 +178,11 @@ module.exports.checkLocation = async function (bot, msg) {
   const chatId = msg.chat.id
   if (!selectedByUser[chatId]) selectedByUser[chatId] = {}
   if (!globalBuffer[chatId]) globalBuffer[chatId] = {}
+  if (!selectedByUser[chatId]?.language) {
+    const { lang_, authorized } = await module.exports.checkTgUser(msg)
+    globalBuffer[msg.chat.id].authorized = authorized
+    selectedByUser[chatId].language = lang_
+  }
 
   if (!globalBuffer[chatId]?.authorized) {
     const cafeLocation = await geo.getCafeLocation()

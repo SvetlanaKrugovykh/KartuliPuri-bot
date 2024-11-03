@@ -27,13 +27,15 @@ async function handler(bot, msg, webAppUrl) {
   const data = getCallbackData(msg.text)
   if (!chatId) return
 
-  let selected_ = null
   if (!selectedByUser[chatId]) selectedByUser[chatId] = {}
   if (!globalBuffer[chatId]) globalBuffer[chatId] = {}
   let lang = selectedByUser[chatId]?.language || 'pl'
+  if (!selectedByUser[chatId]?.language) {
+    const { lang_ } = await menu.checkTgUser(msg, lang)
+    lang = lang_
+  }
 
-  const adminUser = users.find(user => user.id === chatId)
-  console.log('The choise is:', data);
+  console.log('The choice is:', data)
   switch (data) {
     case '0_1':
       await menu.guestChooseLanguageMenu(bot, msg)
