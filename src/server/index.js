@@ -90,7 +90,7 @@ bot.on('message', async (msg) => {
   const text = msg.text
   if (await isThisGroupId(bot, chatId, msg)) return
 
-  if (text === '/start') {
+  if (text === '/start' || (globalBuffer[chatId] === undefined)) {
     await commonStartMenu(bot, msg, true)
   } else {
     await handler(bot, msg, undefined)
