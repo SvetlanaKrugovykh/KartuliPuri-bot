@@ -1,7 +1,6 @@
 const { clientAdminMenuStarter } = require('../controllers/clientsAdmin')
 require('dotenv').config()
 const { buttonsConfig, texts } = require('./keyboard')
-const { sendReqToDB } = require('../modules/tlg_to_DB')
 const { users } = require('../users/users.model')
 const path = require('path')
 const { globalBuffer, selectedByUser } = require('../globalBuffer')
@@ -10,6 +9,7 @@ const geo = require('./geo')
 const { menuItems } = require('../data/consts')
 const { generateIntervals } = require('../services/timeService')
 const { sayTimePeriod } = require('../controllers/msgSenderMenu')
+const { userSettings } = require('../controllers/userSettings')
 
 
 module.exports.commonStartMenu = async function (bot, msg, home = false) {
@@ -23,23 +23,16 @@ module.exports.commonStartMenu = async function (bot, msg, home = false) {
   }
 }
 
-module.exports.userMenu = async function (bot, msg, lang = "en", home = false) {
+module.exports.userMenu = async function (bot, msg, lang = 'pl', home = false) {
   if (!selectedByUser[msg.chat.id]) selectedByUser[msg.chat.id] = {}
   if (!globalBuffer[msg.chat.id]) globalBuffer[msg.chat.id] = {}
 
-
-  selectedByUser[msg.chat.id] = {
-    ...selectedByUser[msg.chat.id],
-    language: lang,
-    id: msg.chat.id,
-    name: msg.chat.username + '---' + msg.chat.first_name + ' ' + msg.chat.last_name
-  }
-
-  const { lang_, authorized } = await module.exports.checkTgUser(msg, lang)
+  const authorized = selectedByUser[msg.chat.id]?.authorized || false
   globalBuffer[msg.chat.id].authorized = authorized
 
   if (authorized && home) {
     globalBuffer[msg.chat.id].authorized = true
+    const lang_ = selectedByUser[msg.chat.id]?.language || 'pl'
     await module.exports.usersStarterMenu(bot, msg, lang_)
   } else {
     globalBuffer[msg.chat.id].authorized = false
@@ -47,32 +40,7 @@ module.exports.userMenu = async function (bot, msg, lang = "en", home = false) {
   }
 }
 
-module.exports.checkTgUser = async function (msg, lang = "en") {
-
-  const info = {
-    lang_: selectedByUser?.language || 'pl',
-    authorized: false
-  }
-
-  try {
-    const response = await sendReqToDB('__CheckTlgClient__', selectedByUser[msg.chat.id], msg.chat.id)
-    console.log('CheckTlgClient:', response)
-    if (response !== null) {
-      const parsedResponse = JSON.parse(response)
-      info.authorized = parsedResponse.ResponseArray?.[0]?.authorized || false
-      info.lang_ = parsedResponse.ResponseArray?.[0]?.language || 'pl'
-    } else {
-      console.log('No response from DB')
-      info.lang_ = lang
-      selectedByUser[msg.chat.id].language = lang
-    }
-  } catch (err) {
-    console.log(err)
-  }
-  return info
-}
-
-module.exports.guestMenu = async function (bot, msg, lang = "en") {
+module.exports.guestMenu = async function (bot, msg, lang = 'pl') {
   await bot.sendMessage(msg.chat.id, `<b>${process.env.BRAND_NAME}</b> ${texts[lang]['welcome']} <b>${msg.chat.first_name} ${msg.chat.last_name}</b>!`, { parse_mode: "HTML" })
   await bot.sendMessage(msg.chat.id, texts[lang]['0_0'], { parse_mode: "HTML" })
   await bot.sendMessage(msg.chat.id, buttonsConfig["guestMenu"].title[lang], {
@@ -83,7 +51,7 @@ module.exports.guestMenu = async function (bot, msg, lang = "en") {
   })
 }
 
-module.exports.guestChooseLanguageMenu = async function (bot, msg, lang = "en") {
+module.exports.guestChooseLanguageMenu = async function (bot, msg, lang = 'pl') {
   await bot.sendMessage(msg.chat.id, buttonsConfig["guestChooseLanguage"].title[lang], {
     reply_markup: {
       keyboard: buttonsConfig["guestChooseLanguage"].buttons[lang],
@@ -92,7 +60,7 @@ module.exports.guestChooseLanguageMenu = async function (bot, msg, lang = "en") 
   })
 }
 
-module.exports.usersStarterMenu = async function (bot, msg, lang = "en") {
+module.exports.usersStarterMenu = async function (bot, msg, lang = 'pl') {
   await bot.sendMessage(msg.chat.id, buttonsConfig["usersStarterMenu"].title[lang], {
     reply_markup: {
       keyboard: buttonsConfig["usersStarterMenu"].buttons[lang],
@@ -161,7 +129,7 @@ module.exports.supportScene = async function (bot, msg) {
   }
 }
 
-module.exports.downloadMenu = async function (bot, msg, lang = "en") {
+module.exports.downloadMenu = async function (bot, msg, lang = 'pl') {
   try {
     const filePath = path.join(__dirname, '../../../assets/menu', `${lang}.pdf`)
     await bot.sendDocument(msg.chat.id, filePath, {}, {
@@ -179,10 +147,11 @@ module.exports.checkLocation = async function (bot, msg) {
   if (!selectedByUser[chatId]) selectedByUser[chatId] = {}
   if (!globalBuffer[chatId]) globalBuffer[chatId] = {}
   if (!selectedByUser[chatId]?.language) {
-    const { lang_, authorized } = await module.exports.checkTgUser(msg)
+    const authorized = selectedByUser[chatId]?.authorized || false
     globalBuffer[msg.chat.id].authorized = authorized
-    selectedByUser[chatId].language = lang_
   }
+
+  const lang = selectedByUser[chatId]?.language || 'pl'
 
   if (!globalBuffer[chatId]?.authorized) {
     const cafeLocation = await geo.getCafeLocation()
@@ -197,7 +166,7 @@ module.exports.checkLocation = async function (bot, msg) {
   return true
 }
 
-module.exports.selectProducts = async function (bot, msg, lang = "en") {
+module.exports.selectProducts = async function (bot, msg, lang = 'pl') {
   try {
     const chatId = msg.chat.id
     if (!globalBuffer[chatId]) globalBuffer[chatId] = {}
@@ -255,7 +224,7 @@ module.exports.removeProducts = async function (bot, msg, lang, operation) {
   } catch (error) { console.log(error) }
 }
 
-module.exports.ordersMenu = async function (bot, msg, lang = "en") {
+module.exports.ordersMenu = async function (bot, msg, lang = 'pl') {
   await bot.sendMessage(msg.chat.id, buttonsConfig["usersOrderMenu"].title[lang], {
     reply_markup: {
       keyboard: buttonsConfig["usersOrderMenu"].buttons[lang],
@@ -264,7 +233,7 @@ module.exports.ordersMenu = async function (bot, msg, lang = "en") {
   })
 }
 
-module.exports.sendOrder = async function (bot, msg, lang = "en") {
+module.exports.sendOrder = async function (bot, msg, lang = 'pl') {
   const chatId = msg.chat.id
   const selectedProducts = globalBuffer[chatId]?.selectedProducts
   if (!Array.isArray(selectedProducts) || selectedProducts.length === 0) {
@@ -287,7 +256,7 @@ module.exports.sendOrder = async function (bot, msg, lang = "en") {
   })
 }
 
-module.exports.ChooseTime = async function (bot, msg, lang = "en") {
+module.exports.ChooseTime = async function (bot, msg, lang = 'pl') {
   const chatId = msg.chat.id
   const intervals = generateIntervals(lang)
 

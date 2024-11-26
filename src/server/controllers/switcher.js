@@ -1,9 +1,10 @@
 const { buttonsConfig } = require('../modules/keyboard')
 const { users } = require('../users/users.model')
 const menu = require('../modules/common_menu')
-const { saveLanguage } = require('../modules/common_functions')
+const { saveLanguage } = require('../controllers/userSettings')
 const { isThisGroupId } = require('../modules/bot')
 const { globalBuffer, selectedByUser } = require('../globalBuffer')
+const { userSettings } = require('../controllers/userSettings')
 
 function getCallbackData(text) {
   try {
@@ -25,19 +26,18 @@ function getCallbackData(text) {
 async function handler(bot, msg, webAppUrl) {
   const chatId = msg?.chat?.id
   const data = getCallbackData(msg.text)
+  let inZone = false
   if (!chatId) return
 
+  if (selectedByUser[chatId] === undefined) await userSettings(msg)
   if (!selectedByUser[chatId]) selectedByUser[chatId] = {}
   if (!globalBuffer[chatId]) globalBuffer[chatId] = {}
   let lang = selectedByUser[chatId]?.language || 'pl'
-  if (!selectedByUser[chatId]?.language) {
-    const { lang_ } = await menu.checkTgUser(msg, lang)
-    lang = lang_
-  }
 
   console.log('The choice is:', data)
   switch (data) {
     case '0_1':
+      if (selectedByUser[chatId].changed) await userSettings(msg, 'changed')
       await menu.guestChooseLanguageMenu(bot, msg)
       break
     case '0_2':
@@ -56,18 +56,22 @@ async function handler(bot, msg, webAppUrl) {
     case '0_7':
     case '0_8':
     case '0_9':
-      const selected_ = await saveLanguage(bot, msg, data, selectedByUser[chatId])
-      if (selected_?.language) selectedByUser[chatId].language = selected_.language
-      await menu.commonStartMenu(bot, msg)
+      if (selectedByUser[chatId]?.changed) return
+      await saveLanguage(bot, msg, data)
+      lang = selectedByUser[chatId]?.language || 'pl'
+      await menu.usersStarterMenu(bot, msg, lang)
       break
     case '2_1':
       lang = selectedByUser[chatId]?.language || 'pl'
       await menu.ordersMenu(bot, msg, lang)
       break
     case '3_1':
-      const inZone = await menu.checkLocation(bot, msg)
-      if (!inZone) return
-      await menu.selectProducts(bot, msg, lang)
+      inZone = await menu.checkLocation(bot, msg)
+      if (!inZone) {
+        await menu.commonStartMenu(bot, msg, lang)
+      } else {
+        await menu.selectProducts(bot, msg, lang)
+      }
       break
     case '3_2':
       await menu.removeProducts(bot, msg, lang, 'finalize')
@@ -151,7 +155,8 @@ async function goBack(bot, msg, forcefully = false) {
     if (msg.text.includes('🏠') || forcefully) {
       await menu.commonStartMenu(bot, msg, true)
     } else if (msg.text.includes('↩️')) {
-      await menu.usersStarterMenu(bot, msg)
+      const lang = selectedByUser[chatId]?.language || 'pl'
+      await menu.usersStarterMenu(bot, msg, lang)
     }
   } catch (error) { console.log(error) }
 }

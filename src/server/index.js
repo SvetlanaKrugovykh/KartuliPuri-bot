@@ -1,4 +1,3 @@
-const Fastify = require('fastify')
 require('dotenv').config()
 const { handler } = require('./controllers/switcher')
 const { commonStartMenu } = require('./modules/common_menu')
@@ -8,16 +7,13 @@ const { texts } = require('./modules/keyboard')
 const { menuItems } = require('./data/consts')
 const { sendAcceptedOrder, sayTimePeriod } = require('./controllers/msgSenderMenu')
 const { sendOrderToDB } = require('./modules/tlg_to_DB')
-
-const app = Fastify({
-  trustProxy: true
-})
-
+const { userSettings } = require('./controllers/userSettings')
 
 bot.on('callback_query', async (callbackQuery) => {
   try {
     const chatId = callbackQuery.message.chat.id
-    const lang = selectedByUser?.language || 'pl'
+    if (selectedByUser[chatId] === undefined) await userSettings(callbackQuery.message)
+    const lang = selectedByUser[chatId]?.language || 'pl'
     if (globalBuffer[chatId] === undefined) globalBuffer[chatId] = {}
     const selectedProducts = globalBuffer[chatId].selectedProducts || []
 
@@ -28,7 +24,10 @@ bot.on('callback_query', async (callbackQuery) => {
     if (callbackQuery.data === 'send_order') {
       console.log('send_order')
       await sendAcceptedOrder(bot, callbackQuery.message, lang)
+      await userSettings(callbackQuery.message, 're_read')
+      if (!selectedByUser[chatId]?.authorized) await userSettings(callbackQuery.message, 'authorize', lang)
       const response = await sendOrderToDB(chatId, selectedProducts, globalBuffer[chatId].selectedTime, lang)
+      await userSettings(callbackQuery.message)
       try {
         const parsedResponse = JSON.parse(response)
         const orderDetails = parsedResponse.ResponseArray[0]
@@ -36,7 +35,6 @@ bot.on('callback_query', async (callbackQuery) => {
       } catch (e) {
         console.log(e)
       }
-      selectedByUser[chatId] = {}
       globalBuffer[chatId].selectedProducts = []
       globalBuffer[chatId].selectionProductsFlag = false
       globalBuffer[chatId].selectionFlag = false
@@ -91,11 +89,14 @@ bot.on('message', async (msg) => {
   if (await isThisGroupId(bot, chatId, msg)) return
 
   if (text === '/start' || (globalBuffer[chatId] === undefined)) {
+    console.log(new Date())
+    console.log(msg.chat)
+    await userSettings(msg)
     await commonStartMenu(bot, msg, true)
-    await handler(bot, msg, undefined)
   } else {
+    await userSettings(msg)
     await handler(bot, msg, undefined)
   }
 })
 
-module.exports = { app, bot }
+module.exports = { bot }

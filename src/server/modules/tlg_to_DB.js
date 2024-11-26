@@ -49,10 +49,11 @@ function objToString(reqType, data, text) {
 
 module.exports.sendOrderToDB = async (chatId, selectedProducts, selectedTime, lang) => {
   try {
+    let time_ = selectedTime ? selectedTime : 'ASAP'
     const data = {
       chatId: chatId,
       selectedProducts: selectedProducts,
-      selectedTime: selectedTime,
+      selectedTime: time_,
       language: lang
     }
     const response = await module.exports.sendReqToDB('___CreateOrder__', data, chatId)
